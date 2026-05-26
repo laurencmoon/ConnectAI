@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sales Assistant</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <main class="dashboard">
+            <header>
+                <h1>Sales Dashboard</h1>
+            </header>
+            <div class="dashboard-content">
+                <div class="grid-container">
+                    <div class="card">
+                        <h3>Monthly Revenue</h3>
+                        <p>$45,000</p>
+                    </div>
+                    <div class="card">
+                        <h3>New Leads</h3>
+                        <p>128</p>
+                    </div>
+                    <div class="card">
+                        <h3>Conversion Rate</h3>
+                        <p>12%</p>
+                    </div>
+                </div>
+                <div class="main-chart">
+                    <h3>Sales Performance</h3>
+                    <div class="chart-placeholder">Chart goes here</div>
+                </div>
+            </div>
+        </main>
+        
+        <!-- Chat panel overlaid on the right -->
+        <div class="chat-panel">
+            <div class="chat-header">
+                <h2>AI Sales Assistant</h2>
+                <button class="close-btn">&times;</button>
+            </div>
+            <div class="chat-messages">
+                <div class="message assistant">
+                    Hello! How can I help you with your sales data today?
+                </div>
+            </div>
+            <div class="chat-input">
+                <input type="text" placeholder="Ask a question...">
+                <button>Send</button>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
