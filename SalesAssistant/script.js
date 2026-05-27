@@ -1,52 +1,84 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const closeBtn = document.querySelector('.close-btn');
-    const chatPanel = document.querySelector('.chat-panel');
-    const sendBtn = document.querySelector('.chat-input button');
-    const inputField = document.querySelector('.chat-input input');
-    const messagesContainer = document.querySelector('.chat-messages');
+    const salesAssistantPanel = document.querySelector('.sales-assistant-panel');
+    const sendBtn = document.querySelector('.send-btn');
+    const inputField = document.querySelector('.input-box input');
 
-    // Function to close the chat panel
+    // Trigger the slide-in animation on load
+    setTimeout(() => {
+        salesAssistantPanel.classList.add('open');
+    }, 100);
+
+    // Close button functionality (slides panel out)
+    const closeBtn = document.querySelector('.close-btn');
     closeBtn.addEventListener('click', () => {
-        chatPanel.style.display = 'none';
-        // In a full design, we might add a button to open it again!
+        salesAssistantPanel.classList.remove('open');
     });
 
-    // Function to send a message
-    function sendMessage() {
+    // Open panel from left nav sparkle button
+    const sparkleBtn = document.querySelector('.sparkle-container');
+    sparkleBtn.addEventListener('click', () => {
+        salesAssistantPanel.classList.add('open');
+    });
+
+    // Moma icon toggle effect
+    const momaIcon = document.querySelector('.moma-icon');
+    momaIcon.addEventListener('click', () => {
+        momaIcon.classList.toggle('desaturated');
+    });
+
+    // Expand panel width functionality
+    const expandBtn = document.querySelector('.expand-btn');
+    expandBtn.addEventListener('click', () => {
+        salesAssistantPanel.classList.toggle('expanded');
+        document.body.classList.toggle('panel-expanded');
+    });
+
+    // Toggle chat history panel
+    const menuBtn = document.querySelector('.menu-btn');
+    const chatHistoryPanel = document.querySelector('.chat-history-panel');
+    menuBtn.addEventListener('click', () => {
+        chatHistoryPanel.classList.toggle('open');
+    });
+
+    // Accordion functionality for the panel
+    const accordionHeaders = document.querySelectorAll('.accordion-header');
+    accordionHeaders.forEach(header => {
+        header.addEventListener('click', () => {
+            const item = header.parentElement;
+            const isExpanded = item.classList.contains('expanded');
+            
+            // Toggle the clicked item
+            if (!isExpanded) {
+                item.classList.add('expanded');
+                const arrow = header.querySelector('.arrow i');
+                if (arrow) arrow.textContent = 'keyboard_arrow_up';
+            } else {
+                item.classList.remove('expanded');
+                const arrow = header.querySelector('.arrow i');
+                if (arrow) arrow.textContent = 'keyboard_arrow_down';
+            }
+        });
+    });
+
+
+
+    // Function to handle sending a message (mock behavior)
+    function handleSend() {
         const text = inputField.value.trim();
         if (text === '') return;
-
-        // Create a new div for the user's message
-        const messageDiv = document.createElement('div');
-        messageDiv.classList.add('message', 'user');
-        messageDiv.textContent = text; // Safe way to add text
-
-        // Add the message to the chat container
-        messagesContainer.appendChild(messageDiv);
         
         // Clear the input field
         inputField.value = '';
-
-        // Auto-scroll to the bottom of the chat
-        messagesContainer.scrollTop = messagesContainer.scrollHeight;
-
-        // Simulate a response from the assistant after a short delay
-        setTimeout(() => {
-            const responseDiv = document.createElement('div');
-            responseDiv.classList.add('message', 'assistant');
-            responseDiv.textContent = "I'm a prototype assistant. I heard you say: '" + text + "'.";
-            messagesContainer.appendChild(responseDiv);
-            messagesContainer.scrollTop = messagesContainer.scrollHeight;
-        }, 1000);
+        console.log("User asked: ", text);
     }
 
     // Send message on button click
-    sendBtn.addEventListener('click', sendMessage);
+    sendBtn.addEventListener('click', handleSend);
 
     // Send message on Enter key press
     inputField.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') {
-            sendMessage();
+            handleSend();
         }
     });
 });
