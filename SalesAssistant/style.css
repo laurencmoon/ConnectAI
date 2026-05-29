@@ -265,6 +265,29 @@ body {
     padding: 20px;
     overflow-y: auto;
     background-color: var(--bg-color);
+    position: relative; /* Added for flash effect positioning */
+}
+
+.screenshot-flash {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #ffffff;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 1000;
+}
+
+.screenshot-flash.active {
+    animation: flash 0.5s ease-out;
+}
+
+@keyframes flash {
+    0% { opacity: 0; }
+    50% { opacity: 0.8; }
+    100% { opacity: 0; }
 }
 
 .dashboard-header h1 {
@@ -535,6 +558,13 @@ body {
     object-fit: cover;
 }
 
+.user-greeting {
+    margin-top: auto; /* Push to bottom when short */
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
 .user-greeting h2 {
     font-size: 28px;
     line-height: 35px;
@@ -688,15 +718,141 @@ body {
     border: 1px solid #dadce0;
     border-radius: 16px; /* Less rounded to look better with double height */
     padding: 10px 15px;
+    position: relative; /* Added for menu positioning */
+    transition: all 1s ease; /* Slower smooth resizing */
 }
 
-.input-box input {
+.plus-menu {
+    position: absolute;
+    bottom: calc(100% + 5px); /* Position above the icon */
+    left: 0;
+    background-color: #ffffff;
+    border: 1px solid #dadce0;
+    border-radius: 8px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15), 0 3px 6px rgba(0, 0, 0, 0.10); /* Higher elevation */
+    display: flex;
+    flex-direction: column;
+    z-index: 100;
+    width: 200px;
+    overflow: hidden;
+    
+    /* Animation properties */
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px);
+    transition: all 0.5s ease; /* Slower fade in and out */
+}
+
+.plus-menu.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.plus-menu .menu-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    cursor: pointer;
+    font-size: 14px;
+    line-height: 20px;
+    font-weight: 400;
+    color: #202124;
+    transition: background-color 0.2s ease;
+}
+
+.plus-menu .menu-item:hover {
+    background-color: #f1f3f4;
+}
+
+.plus-menu .menu-item i {
+    color: #5f6368;
+    font-size: 20px;
+}
+
+.input-box [contenteditable="true"] {
     border: none;
     background: none;
     padding: 5px 0;
     font-size: 0.9rem;
     outline: none;
     width: 100%;
+    min-height: 20px;
+    max-height: 100px;
+    overflow-y: auto;
+    word-wrap: break-word;
+}
+
+.input-box [contenteditable="true"]:empty:before {
+    content: attr(placeholder);
+    color: #5f6368;
+    pointer-events: none;
+    display: block;
+}
+
+/* File Chips Styles */
+.chips-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.file-chip {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background-color: #e8f0fe;
+    border-radius: 16px;
+    padding: 4px 8px;
+    font-size: 12px;
+    color: #202124;
+    max-width: 100%;
+    max-height: 40px; /* Added for smooth collapse */
+    transition: all 0.5s ease; /* Match user request for slower animation */
+    overflow: hidden;
+}
+
+.file-chip .chip-icon {
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    color: #fff;
+    flex-shrink: 0;
+}
+
+.file-chip.image .chip-icon { background-color: #ea4335; }
+.file-chip.pdf .chip-icon { background-color: #ea4335; }
+.file-chip.doc .chip-icon { background-color: #1a73e8; }
+.file-chip.sheet .chip-icon { background-color: #34a853; }
+.file-chip.slide .chip-icon { background-color: #fbbc04; }
+
+.file-chip .chip-text {
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.file-chip .chip-close {
+    cursor: pointer;
+    color: #5f6368;
+    font-size: 16px;
+    margin-left: 4px;
+}
+
+.file-chip.removing {
+    max-height: 0;
+    opacity: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-top: 0;
+    margin-bottom: 0;
 }
 
 .input-actions {
@@ -710,6 +866,19 @@ body {
     color: var(--text-sub);
     font-size: 1.2rem;
     margin-right: 5px;
+    position: relative; /* Added for menu positioning */
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    transition: background-color 0.2s ease;
+}
+
+.plus-icon:hover {
+    background-color: rgba(32,33,36,0.08);
 }
 
 .send-btn {
@@ -718,4 +887,102 @@ body {
     color: var(--primary-blue);
     font-size: 1.2rem;
     cursor: pointer;
+}
+
+/* Chat Conversation Styles */
+.message {
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.user-message {
+    align-self: flex-end;
+    background-color: #E8F0FE;
+    padding: 12px;
+    border-radius: 16px;
+    max-width: 80%;
+}
+
+.user-message .message-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+}
+
+.user-message .message-avatar {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+}
+
+.user-message .message-name {
+    font-size: 12px;
+    font-weight: 500;
+    color: #5f6368;
+}
+
+.user-message .message-body {
+    font-size: 14px;
+    color: #202124;
+}
+
+.model-message {
+    align-self: flex-start;
+    max-width: 90%;
+    padding: 12px 0;
+}
+
+.model-message .message-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.model-message .model-icons {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    background-image: linear-gradient(white, white), linear-gradient(90deg, #1a73e8, #af95ff);
+    background-origin: border-box;
+    background-clip: content-box, border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.model-message .model-icons img {
+    width: 24px;
+    height: 24px;
+}
+
+.model-message .thinking-label {
+    font-size: 12px;
+    color: #5f6368;
+    cursor: pointer;
+}
+
+.model-message .message-body {
+    font-size: 14px;
+    color: #202124;
+}
+
+.model-message h3 {
+    font-size: 14px;
+    font-weight: 700;
+    margin: 10px 0 5px 0;
+}
+
+.model-message ul {
+    padding-left: 20px;
+    margin: 0;
+}
+
+.model-message li {
+    margin-bottom: 5px;
 }
